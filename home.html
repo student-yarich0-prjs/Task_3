@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Приветственное приложение</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f0f2f5;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .greeting {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+            font-size: 24px;
+            text-align: center;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .form-section {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            margin: 10px 0;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .names-list {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .names-list h2 {
+            color: #333;
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+
+        .names-list ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .names-list li {
+            padding: 10px;
+            background-color: white;
+            margin-bottom: 8px;
+            border-radius: 5px;
+            border-left: 4px solid #4CAF50;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .empty-message {
+            color: #666;
+            text-align: center;
+            padding: 20px;
+            font-style: italic;
+        }
+
+        .success-message {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .counter {
+            background-color: #e3f2fd;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: bold;
+            color: #1976d2;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Добро пожаловать!</h1>
+
+        {% if saved %}
+        <div class="success-message">
+            Имя "{{ name }}" успешно сохранено!
+        </div>
+        {% endif %}
+
+        {% if show_greeting and name %}
+        <div class="greeting">
+            Привет, {{ name }}! 👋<br>
+            Рады приветствовать тебя!
+        </div>
+        {% endif %}
+
+        <div class="form-section">
+            <form method="POST">
+                {% csrf_token %}
+                <input type="text" name="name" placeholder="Введите ваше имя..." required autofocus>
+                <button type="submit">Сохранить имя</button>
+            </form>
+        </div>
+
+        <div class="names-list">
+            <h2>Сохраненные имена</h2>
+            <div class="counter">
+                Всего сохранено: {{ all_names|length }} имен
+            </div>
+
+            {% if all_names %}
+            <ul>
+                {% for user in all_names %}
+                <li>
+                    {{ forloop.counter }}. {{ user.name }}
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <div class="empty-message">
+                Пока нет сохраненных имен. Будьте первым!
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+
+</html>
